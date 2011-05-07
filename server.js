@@ -1,28 +1,18 @@
 var connect = require('connect'),
-  spawn = require('child_process').spawn;
+  url = require('url'),
+  mustachio = require('./mustachio.js');
 
 connect(
   connect.logger(),
   
   connect.router(function(app){
     app.get('/', function(req, res, next){
-      var src = 'dubya.jpeg'; //req.params.src;
+      var src = url.parse(req.url, true).query.src;
       if (src){
-        console.log("Resizing " + src);
-        var convert = spawn('convert', [src, '-resize', '100x', '-']);
-        
-        convert.stdout.on('data', function (data) {
-          res.write(data);
-        });
-        
-        convert.stderr.on('data', function (data) {
-          console.log('stderr: ' + data);
-        });
-        
-        convert.on('exit', function (code) {
-          res.end();
-          console.log('child process exited with code ' + code);
-        });
+        console.log('processing ' + src);
+        mustachio.processSrc(src, res);
+      } else {
+        res.end("no src provided");
       }
     });
   })
