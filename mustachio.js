@@ -10,32 +10,21 @@ function fileExt(filenameOrUrl){
 }
 
 exports.processSrc = function(src, res){
-  console.log('processSrc');
   var extension = '.' + fileExt(src);
-  temp.open({prefix: 'mustachio', suffix: extension}, function(err, tmpFile){
+  temp.open({prefix: 'mustachio_', suffix: extension}, function(err, tmpFile){
     var path = tmpFile.path;
-    console.log('tmpfile: ', path);
     
     var ws = fs.createWriteStream(path);
-    // ws.on('data', function(chunk){
-    //   console.log('stream data');
-    // });
-    // ws.on('end', function(){
-    //   console.log('stream end');
-    //   exports.mustachify(path, res);
-    // });
     ws.on('close', function(){
-      console.log('stream closed');
       exports.mustachify(path, res);
     });
     
-    var r = request({uri: src});
-    r.pipe(ws);
+    // download image
+    request({uri: src}).pipe(ws);
   });
 };
 
 exports.mustachify = function(filename, res){
-  console.log("Resizing " + filename);
   var convert = spawn('convert', [filename, '-resize', '100x', '-']);
   
   convert.stdout.on('data', function (data) {
@@ -48,6 +37,8 @@ exports.mustachify = function(filename, res){
   
   convert.on('exit', function (code) {
     res.end();
-    console.log('child process exited with code ' + code);
+    if ( code !== 0 ){
+      console.log('child process exited with code ' + code);
+    }
   });
 };

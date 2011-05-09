@@ -9,7 +9,6 @@ connect(
     app.get('/', function(req, res, next){
       var src = url.parse(req.url, true).query.src;
       if (src){
-        console.log('processing ' + src);
         mustachio.processSrc(src, res);
       } else {
         res.end("no src provided");
