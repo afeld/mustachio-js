@@ -17,7 +17,9 @@ var FACE_POS_ATTRS = ['center', 'eye_left', 'eye_right', 'mouth_left', 'mouth_ce
 var MUSTACHE = {
   filename: 'mustache_03.png',
   width: 491,
-  height: 105
+  height: 105,
+  topOffset: -10.0, // from nose
+  bottomOffset: 10.0 // from center of mouth
 };
 
 // note: doesn't handle query strings
@@ -79,10 +81,10 @@ exports.mustachify = function(filename, photoData, res){
     // of the mustache is mapped to the nose, and the bottom-center
     // of the stache is mapped to the center of the mouth
     var affineParams = [
-      [ MUSTACHE.width / 2.0, 0 ], // top-center of stache
-      [ face.nose.x, face.nose.y ], // nose
+      [ MUSTACHE.width / 2.0, MUSTACHE.topOffset ], // top-center of stache
+      [ face.nose.x, face.nose.y  ], // nose
       
-      [ MUSTACHE.width / 2.0, MUSTACHE.height ], // bottom-center of stache
+      [ MUSTACHE.width / 2.0, MUSTACHE.height+MUSTACHE.bottomOffset ], // bottom-center of stache
       [ face.mouth_center.x, face.mouth_center.y ] // center of mouth
     ]
     
