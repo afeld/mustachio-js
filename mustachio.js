@@ -19,7 +19,7 @@ var MUSTACHE = {
   width: 491,
   height: 105,
   topOffset: -10.0, // from nose
-  bottomOffset: 10.0 // from center of mouth
+  bottomOffset: 15.0 // from center of mouth
 };
 
 // note: doesn't handle query strings
@@ -50,11 +50,14 @@ exports.processSrc = function(src, res){
     
     // get face data
     request({uri: faceUrl}, function(err, faceRes, body){
-      if (!err && faceRes.statusCode == 200) {
+      if (err || faceRes.statusCode !== 200) {
+        console.error("ERROR: face detection failed:", err)
+      } else {
         var faceApiData = JSON.parse(body);
         photoData = photoDataToPx(faceApiData.photos[0]);
         
         if (imageDownloaded){
+          console.log("download finished first");
           exports.mustachify(path, photoData, res);
         }
       }
@@ -66,6 +69,7 @@ exports.processSrc = function(src, res){
       imageDownloaded = true;
       
       if (photoData) {
+        console.log("Face API finished first");
         exports.mustachify(path, photoData, res);
       }
     });
@@ -103,14 +107,15 @@ exports.mustachify = function(filename, photoData, res){
   });
   
   convert.stderr.on('data', function (data) {
-    console.log('stderr: ' + data);
+    console.warn('WARN: ' + data);
     res.write(data);
   });
   
   convert.on('exit', function (code) {
-    res.end();
     if ( code !== 0 ){
-      console.log('child process exited with code ' + code);
+      res.statusCode = 500;
+      console.error('ERROR: child process exited with code ' + code);
     }
+    res.end();
   });
 };
