@@ -21,19 +21,26 @@ function fileExt(filenameOrUrl){
 exports.processSrc = function(src, res){
   var extension = '.' + fileExt(src);
   temp.open({prefix: 'mustachio_', suffix: extension}, function(err, tmpFile){
-    var path = tmpFile.path;
+    var path = tmpFile.path,
+      imageDownloaded = false,
+      faceData = null,
+      faceUrl = 'http://api.face.com/faces/detect.json?api_key=' + MUSTACHIO_FACE_API_KEY + '&api_secret=' + MUSTACHIO_FACE_API_SECRET + '&urls=' + src;
     
-    var faceUrl = 'http://api.face.com/faces/detect.json?api_key=' + MUSTACHIO_FACE_API_KEY + '&api_secret=' + MUSTACHIO_FACE_API_SECRET + '&urls=' + src;
     request({uri: faceUrl}, function(err, faceRes, body){
       if (!err && faceRes.statusCode == 200) {
-        var faceData = JSON.parse(body);
-        exports.mustachify(path, res); // TODO pass faceData
+        faceData = JSON.parse(body);
+        if (imageDownloaded){
+          exports.mustachify(path, res); // TODO pass faceData
+        }
       }
     });
     
     var ws = fs.createWriteStream(path);
     ws.on('close', function(){
-      // exports.mustachify(path, res);
+      imageDownloaded = true;
+      if (faceData) {
+        exports.mustachify(path, res); // TODO pass faceData
+      }
     });
     
     // download image
@@ -50,6 +57,7 @@ exports.mustachify = function(filename, res){
   
   convert.stderr.on('data', function (data) {
     console.log('stderr: ' + data);
+    res.write(data);
   });
   
   convert.on('exit', function (code) {
