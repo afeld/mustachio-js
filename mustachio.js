@@ -92,7 +92,7 @@ exports.mustachify = function(filename, photoData, res){
     console.log('affine params:', affineParamsStr);
     
     convertArgs = convertArgs.concat(
-      ['\\(', MUSTACHE.filename, '+distort', 'Affine', ("'"+affineParamsStr+"'"), '\\)']
+      ['(', MUSTACHE.filename, '+distort', 'Affine', affineParamsStr, ')']
     );
   });
   convertArgs = convertArgs.concat(['-flatten', '-']);
