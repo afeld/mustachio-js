@@ -11,6 +11,7 @@ connect(
     app.get('/', function(req, res, next){
       var src = url.parse(req.url, true).query.src;
       if (src){
+        res.setHeader('Cache-Control', 'public, max-age=86400000'); // one year
         mustachio.processSrc(src, res);
       } else {
         var jadeOptions = {
