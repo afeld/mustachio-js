@@ -3,6 +3,15 @@ var temp = require('temp'),
   fs = require('fs'),
   spawn = require('child_process').spawn;
 
+var MUSTACHIO_FACE_API_KEY = process.env.MUSTACHIO_FACE_API_KEY;
+if (!MUSTACHIO_FACE_API_KEY){
+  throw "Please set MUSTACHIO_FACE_API_KEY.";
+}
+var MUSTACHIO_FACE_API_SECRET = process.env.MUSTACHIO_FACE_API_SECRET;
+if (!MUSTACHIO_FACE_API_SECRET){
+  throw "Please set MUSTACHIO_FACE_API_SECRET.";
+}
+
 // note: doesn't handle query strings
 function fileExt(filenameOrUrl){
   var parts = filenameOrUrl.split('.');
@@ -14,9 +23,17 @@ exports.processSrc = function(src, res){
   temp.open({prefix: 'mustachio_', suffix: extension}, function(err, tmpFile){
     var path = tmpFile.path;
     
+    var faceUrl = 'http://api.face.com/faces/detect.json?api_key=' + MUSTACHIO_FACE_API_KEY + '&api_secret=' + MUSTACHIO_FACE_API_SECRET + '&urls=' + src;
+    request({uri: faceUrl}, function(err, faceRes, body){
+      if (!err && faceRes.statusCode == 200) {
+        var faceData = JSON.parse(body);
+        exports.mustachify(path, res); // TODO pass faceData
+      }
+    });
+    
     var ws = fs.createWriteStream(path);
     ws.on('close', function(){
-      exports.mustachify(path, res);
+      // exports.mustachify(path, res);
     });
     
     // download image
