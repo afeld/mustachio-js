@@ -5,6 +5,7 @@ var connect = require('connect'),
 
 connect(
   connect.logger(),
+  connect.favicon(__dirname + '/public/favicon.ico'),
   
   connect.router(function(app){
     app.get('/', function(req, res, next){
