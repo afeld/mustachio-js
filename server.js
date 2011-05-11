@@ -3,6 +3,10 @@ var connect = require('connect'),
   mustachio = require('./mustachio.js'),
   jade = require('jade');
 
+// process.on('uncaughtException', function (err) {
+//   console.error('ERROR: ' + err);
+// });
+
 connect(
   connect.logger(),
   connect.favicon(__dirname + '/public/favicon.ico'),
@@ -12,7 +16,8 @@ connect(
       var src = url.parse(req.url, true).query.src;
       if (src){
         res.setHeader('Cache-Control', 'public, max-age=86400000'); // one year
-        mustachio.processSrc(src, res);
+        var encodedSrc = encodeURI(src);
+        mustachio.processSrc(encodedSrc, res);
       } else {
         var jadeOptions = {
           cache: true,
