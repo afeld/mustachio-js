@@ -1,6 +1,7 @@
 var connect = require('connect'),
   url = require('url'),
-  mustachio = require('./mustachio.js');
+  mustachio = require('./mustachio.js'),
+  jade = require('jade');
 
 connect(
   connect.logger(),
@@ -11,7 +12,19 @@ connect(
       if (src){
         mustachio.processSrc(src, res);
       } else {
-        res.end("no src provided");
+        var jadeOptions = {
+          cache: true,
+          filename: 'index.jade',
+          locals: {
+            host: req.headers.host
+          }
+        };
+        jade.renderFile('./views/index.jade', jadeOptions, function(err, html){
+          if (err){
+            console.log("jade error:", err);
+          }
+          res.end(html);
+        });
       }
     });
   })
