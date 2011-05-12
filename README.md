@@ -1,4 +1,14 @@
-## Port of [mustachio (Ruby on Sinatra)](https://github.com/afeld/mustachio) to NodeJS.  Looking for a brave hosting company to deploy it to!
+# Port of [mustachio (Ruby on Sinatra)](https://github.com/afeld/mustachio) to NodeJS.
+
+## Looking for a brave hosting company to deploy it to!
+
+## Requirements:
+
+* NodeJS v0.4.1+
+* ImageMagick v6
+* caching (preferably)
+
+---
 
 Sample from the Ruby version:
 
