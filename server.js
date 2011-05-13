@@ -1,7 +1,8 @@
 var connect = require('connect'),
   url = require('url'),
   mustachio = require('./mustachio.js'),
-  jade = require('jade');
+  jade = require('jade'),
+  port = process.env.PORT || 8080;
 
 // process.on('uncaughtException', function (err) {
 //   console.error('ERROR: ' + err);
@@ -35,6 +36,6 @@ connect(
       }
     });
   })
-).listen(8080);
+).listen(port);
 
-console.log('Server running at http://localhost:8080');
+console.log('Server running at http://localhost:' + port);
