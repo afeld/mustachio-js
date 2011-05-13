@@ -79,7 +79,7 @@ exports.processSrc = function(src, res){
 
 exports.mustachify = function(filename, photoData, res){
   var i;
-  var convertArgs = [filename, '-virtual-pixel', 'Transparent']
+  var convertArgs = [filename,, '-matte', '-virtual-pixel', 'Transparent']
   photoData.tags.forEach(function(face){
     // perform affine transform, such that the top-center
     // of the mustache is mapped to the nose, and the bottom-center
