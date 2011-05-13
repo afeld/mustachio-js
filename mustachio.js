@@ -88,7 +88,7 @@ exports.mustachify = function(filename, photoData, res){
       [ MUSTACHE.width / 2.0, MUSTACHE.topOffset ], // top-center of stache
       [ face.nose.x, face.nose.y  ], // nose
       
-      [ MUSTACHE.width / 2.0, MUSTACHE.height+MUSTACHE.bottomOffset ], // bottom-center of stache
+      [ MUSTACHE.width / 2.0, MUSTACHE.height + MUSTACHE.bottomOffset ], // bottom-center of stache
       [ face.mouth_center.x, face.mouth_center.y ] // center of mouth
     ]
     
