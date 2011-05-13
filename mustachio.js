@@ -18,8 +18,8 @@ var MUSTACHE = {
   filename: 'mustache_03.png',
   width: 491,
   height: 105,
-  topOffset: -10.0, // from nose
-  bottomOffset: 15.0 // from center of mouth
+  topOffset: -5.0, // from nose
+  bottomOffset: -15.0 // from center of mouth
 };
 
 // note: doesn't handle query strings
