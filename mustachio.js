@@ -31,8 +31,12 @@ function fileExt(filenameOrUrl){
 function photoDataToPx(photoData){
   FACE_POS_ATTRS.forEach(function(attr){
     photoData.tags.forEach(function(faceData, i){
-      photoData.tags[i][attr].x *= ( photoData.width / 100.0 );
-      photoData.tags[i][attr].y *= ( photoData.height / 100.0 );
+      if (photoData.tags[i][attr]){
+        photoData.tags[i][attr].x *= ( photoData.width / 100.0 );
+        photoData.tags[i][attr].y *= ( photoData.height / 100.0 );
+      } else {
+        console.warn("WARN: missing position attribute " + attr);
+      }
     });
   });
   return photoData;
