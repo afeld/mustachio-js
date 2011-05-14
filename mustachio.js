@@ -95,7 +95,7 @@ exports.mustachify = function(filename, photoData, res){
     var affineParamsStr = affineParams.map( function(subAry){ return subAry.join(','); } ).join(' ');
     
     convertArgs = convertArgs.concat(
-      ['(', MUSTACHE.filename, '-matte', '+distort', 'Affine', affineParamsStr, ')']
+      ['(', MUSTACHE.filename, '-channel', 'RGBA', '-matte', '+distort', 'Affine', affineParamsStr, ')']
     );
   });
   convertArgs = convertArgs.concat(['-flatten', '-']);
