@@ -102,6 +102,7 @@ exports.mustachify = function(filename, photoData, res){
         return Math.round(elt);
       }).join(',');
     }).join(',');
+    console.log("affine params:", affineParamsStr);
     
     convertArgs = convertArgs.concat(
       ['(', MUSTACHE.filename, '+distort', 'Affine', affineParamsStr, ')']
