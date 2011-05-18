@@ -1,4 +1,5 @@
-var temp = require('temp'),
+var path = require('path'),
+  temp = require('temp'),
   request = require('request'),
   fs = require('fs'),
   spawn = require('child_process').spawn;
@@ -15,7 +16,7 @@ if (!MUSTACHIO_FACE_API_SECRET){
 var FACE_POS_ATTRS = ['center', 'eye_left', 'eye_right', 'mouth_left', 'mouth_center', 'mouth_right', 'nose'];
 
 var MUSTACHE = {
-  filename: 'mustache_03.png',
+  filename: path.join(__dirname, 'mustache_03.png'),
   width: 491,
   height: 105,
   topOffset: -5.0, // from nose
