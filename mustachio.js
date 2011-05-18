@@ -83,7 +83,7 @@ exports.processSrc = function(src, res){
 
 exports.mustachify = function(filename, photoData, res){
   var i;
-  var convertArgs = [filename, '-virtual-pixel', 'transparent']
+  var convertArgs = [filename]
   photoData.tags.forEach(function(face){
     // perform affine transform, such that the top-center
     // of the mustache is mapped to the nose, and the bottom-center
@@ -96,10 +96,15 @@ exports.mustachify = function(filename, photoData, res){
       [ face.mouth_center.x, face.mouth_center.y ] // center of mouth
     ]
     
-    var affineParamsStr = affineParams.map( function(subAry){ return subAry.join(','); } ).join(' ');
+    // flatten nested array and convert to integers
+    var affineParamsStr = affineParams.map( function(subAry){
+      return subAry.map(function(elt){
+        return Math.round(elt);
+      }).join(',');
+    }).join(',');
     
     convertArgs = convertArgs.concat(
-      ['(', MUSTACHE.filename, '-matte', '+distort', 'Affine', affineParamsStr, ')']
+      ['(', MUSTACHE.filename, '+distort', 'Affine', affineParamsStr, ')']
     );
   });
   convertArgs = convertArgs.concat(['-flatten', '-']);
